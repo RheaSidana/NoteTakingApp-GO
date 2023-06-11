@@ -11,9 +11,9 @@
     1. Clone the repo
     <br/><br/>
     2. run the command: <br/>
-    ```
-    go mod tidy
-    ```
+    ```<br/>
+    go mod tidy<br/>
+    ```<br/>
     <br/><br/>
     3. DB operations
     <br/><br/>&emsp;
