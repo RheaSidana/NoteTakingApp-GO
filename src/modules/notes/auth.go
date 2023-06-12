@@ -16,7 +16,7 @@ func Authenticate(c *gin.Context, sessionID string) (model.Session, error){
 	}
 	
 	cookie, err := sessions.GetCookie(c)
-	if cookie != session.SessionID && err != nil {
+	if cookie == "" || cookie != session.SessionID && err != nil {
 		c.JSON(401, ErrorResponse{Message: "Unauthorised Access."})
 		return model.Session{}, errors.New("unauthorised access")
 	}
@@ -26,7 +26,7 @@ func Authenticate(c *gin.Context, sessionID string) (model.Session, error){
 
 func AuthenticateUsingCookie(c *gin.Context) (model.Session, error){
 	cookie, err := sessions.GetCookie(c)
-	if err != nil {
+	if cookie == "" || err != nil {
 		c.JSON(401, ErrorResponse{Message: "Unauthorised Access."})
 		return model.Session{}, errors.New("unauthorised access")
 	}
