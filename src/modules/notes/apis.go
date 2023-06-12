@@ -10,7 +10,7 @@ func Apis(r *gin.Engine) {
 	repository := InitRepository(initializer.Db)
 	noteHandler := InitHandler(repository)
 
-	r.POST("/note", noteHandler.CreateNoteHandler)
-	r.GET("/note", noteHandler.ViewNotesHandler)
-	r.DELETE("/note", noteHandler.DeleteNoteHandler)
+	r.POST("/notes", noteHandler.CreateNoteHandler)
+	r.GET("/notes", noteHandler.ViewNotesHandler)
+	r.DELETE("/notes", noteHandler.DeleteNoteHandler)
 }
