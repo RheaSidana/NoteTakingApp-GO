@@ -15,7 +15,7 @@ func SetCookie(c *gin.Context, session string){
 		Value: session,
 		HttpOnly: true,
 		Secure: false,
-		Path: "/note",
+		Path: "/notes",
 		Domain: "localhost",
 		Expires: time.Now().Add(time.Hour*24),
 	}
@@ -40,7 +40,7 @@ func DeleteCookie(c *gin.Context){
         HttpOnly: true,
         Secure:   false,                         
         SameSite: http.SameSiteStrictMode,      
-        Path:     "/note",                      
+        Path:     "/notes",                      
         Domain:   "localhost",               
     }
 
