@@ -90,4 +90,6 @@
     ```
     <br/><br/>
     7. Call APIs
+    <!-- https://docs.google.com/document/d/1yylvD4j20pHsJ7JqNsHjSVElq8S6DtAcmz9pSSjCIxg/edit?usp=sharing -->
+    <a href="https://docs.google.com/document/d/1yylvD4j20pHsJ7JqNsHjSVElq8S6DtAcmz9pSSjCIxg/edit?usp=sharing">[API DOC]</a>
 </h5>
