@@ -4,27 +4,28 @@ import (
 	"NoteApp/initializer"
 	"NoteApp/src/model"
 	"errors"
-	"fmt"
-
-	// "fmt"
 	"time"
 
 	"golang.org/x/crypto/bcrypt"
 )
 
-func GenerateSessionID(user model.User) (string, error) {
+func GenerateSessionID(user model.User, id uint) (string, error) {
 	today := time.Now().UTC().String()
+	user.ID = id
+
+	repository := InitRepository(initializer.Db)
+	session, _ := repository.FindByUser(user.ID)
+	if session != (model.Session{}) {
+		DeleteSessionID(session.SessionID)
+	}
 
 	sessionID, err := bcrypt.GenerateFromPassword(
 		[]byte(user.Email+user.Password+today), 
 		bcrypt.DefaultCost)
-	fmt.Println("error: ", err)
 	if err != nil {
 		return "", errors.New("session encryption unsuccessful")
 	}
 
-
-	repository := InitRepository(initializer.Db)
 	repository.Create(model.Session{
 		SessionID: string(sessionID),
 		UserId: user.ID,	
@@ -32,8 +33,6 @@ func GenerateSessionID(user model.User) (string, error) {
 	if err != nil {
 		return "", errors.New("session failed to add to the table")
 	}
-
-	// fmt.Println("encrypt", string(encrypt))
 
 	return string(sessionID), nil
 }

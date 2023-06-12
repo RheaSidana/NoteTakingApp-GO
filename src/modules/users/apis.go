@@ -10,6 +10,7 @@ func Apis(r *gin.Engine) {
 	repository := InitRepository(initializer.Db)
 	userHandler := InitHandler(repository)
 
-	r.POST("/signup", userHandler.CreateUserHandler)
-	r.POST("/login", userHandler.FindUser)
+	r.POST("/signup", userHandler.SignUpUserHandler)
+	r.POST("/login", userHandler.LoginUserHandler)
+	r.POST("/logout", userHandler.LogoutUserHandler)
 }

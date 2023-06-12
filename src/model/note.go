@@ -4,6 +4,6 @@ import "gorm.io/gorm"
 
 type Note struct {
 	gorm.Model
-	Id   uint32 `json:"userID" binding:"required"`
-	Note string `json:"sessionID" binding:"required"`
+	Note      string `json:"note" binding:"required"`
+	SessionId uint   `gorm:"references:Sessions.ID" json:"sessionID" binding:"required"`
 }
