@@ -9,7 +9,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SetCookie(c *gin.Context, session string){
+type Cookie interface{
+	SetCookie(c *gin.Context, session string)
+	DeleteCookie(c *gin.Context)
+	GetCookie(c *gin.Context) (string, error)
+}
+
+type cookie struct{}
+
+func NewCookie() Cookie{
+	return &cookie{}
+}
+
+func (ck *cookie) SetCookie(c *gin.Context, session string){
 	cookie := http.Cookie{
 		Name: "sid",
 		Value: session,
@@ -31,7 +43,7 @@ func SetCookie(c *gin.Context, session string){
 	)
 }
 
-func DeleteCookie(c *gin.Context){
+func (ck *cookie) DeleteCookie(c *gin.Context){
 	cookie := &http.Cookie{
         Name:     "sid",
         Value:    "",
@@ -55,7 +67,7 @@ func DeleteCookie(c *gin.Context){
 	)
 }
 
-func GetCookie(c *gin.Context) (string, error){
+func (ck *cookie) GetCookie(c *gin.Context) (string, error){
 	cookieValue, err := c.Cookie("sid")
 	fmt.Println("Value",cookieValue)
     if err != nil {

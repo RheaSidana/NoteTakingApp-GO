@@ -8,14 +8,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Authenticate(c *gin.Context, sessionID string) (model.Session, error){
-	session, err := sessions.IsAuthenticate(sessionID)
+func Authenticate(c *gin.Context, sessionID string, hsession sessions.Session, hcookie sessions.Cookie) (model.Session, error) {
+	session, err := hsession.IsAuthenticate(sessionID)
 	if err != nil {
 		c.JSON(401, ErrorResponse{Message: "Unauthorised Access."})
 		return model.Session{}, errors.New("unauthorised access")
 	}
-	
-	cookie, err := sessions.GetCookie(c)
+
+	cookie, err := hcookie.GetCookie(c)
 	if cookie == "" || cookie != session.SessionID && err != nil {
 		c.JSON(401, ErrorResponse{Message: "Unauthorised Access."})
 		return model.Session{}, errors.New("unauthorised access")
@@ -24,18 +24,18 @@ func Authenticate(c *gin.Context, sessionID string) (model.Session, error){
 	return session, nil
 }
 
-func AuthenticateUsingCookie(c *gin.Context) (model.Session, error){
-	cookie, err := sessions.GetCookie(c)
+func AuthenticateUsingCookie(c *gin.Context, hsession sessions.Session, hcookie sessions.Cookie) (model.Session, error) {
+	cookie, err := hcookie.GetCookie(c)
 	if cookie == "" || err != nil {
 		c.JSON(401, ErrorResponse{Message: "Unauthorised Access."})
 		return model.Session{}, errors.New("unauthorised access")
 	}
 
-	session, err := sessions.IsAuthenticate(cookie)
+	session, err := hsession.IsAuthenticate(cookie)
 	if err != nil {
 		c.JSON(401, ErrorResponse{Message: "Unauthorised Access."})
 		return model.Session{}, errors.New("unauthorised access")
 	}
 
 	return session, nil
- }
+}

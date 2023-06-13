@@ -4,10 +4,10 @@ type ErrorResponse struct {
 	Message string
 }
 
-type UserResponse struct{
+type UserResponse struct {
 	Message string
 }
 
-type UserResponseWithSession struct{
+type UserRequestWithSession struct {
 	SID string
 }

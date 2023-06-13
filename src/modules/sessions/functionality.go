@@ -9,14 +9,26 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func GenerateSessionID(user model.User, id uint) (string, error) {
+type Session interface{
+	GenerateSessionID(user model.User, id uint) (string, error)
+	IsAuthenticate(sessionID string) (model.Session, error)
+	DeleteSessionID(sessionID string) (model.Session, error)
+}
+
+type session struct{}
+
+func NewSession() Session{
+	return &session{}
+}
+
+func (s *session) GenerateSessionID(user model.User, id uint) (string, error) {
 	today := time.Now().UTC().String()
 	user.ID = id
 
 	repository := InitRepository(initializer.Db)
 	session, _ := repository.FindByUser(user.ID)
 	if session != (model.Session{}) {
-		DeleteSessionID(session.SessionID)
+		s.DeleteSessionID(session.SessionID)
 	}
 
 	sessionID, err := bcrypt.GenerateFromPassword(
@@ -37,7 +49,7 @@ func GenerateSessionID(user model.User, id uint) (string, error) {
 	return string(sessionID), nil
 }
 
-func IsAuthenticate(sessionID string) (model.Session, error){
+func (s *session) IsAuthenticate(sessionID string) (model.Session, error){
 	repository := InitRepository(initializer.Db)
 
 	session, err := repository.Find(sessionID)
@@ -48,7 +60,7 @@ func IsAuthenticate(sessionID string) (model.Session, error){
 	return session, nil
 }
 
-func DeleteSessionID(sessionID string) (model.Session, error){
+func (s *session) DeleteSessionID(sessionID string) (model.Session, error){
 	repository := InitRepository(initializer.Db)
 
 	session, err := repository.Delete(sessionID)

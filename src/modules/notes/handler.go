@@ -8,6 +8,8 @@ import (
 
 type Handler struct {
 	repository Repository
+	session sessions.Session
+	cookie sessions.Cookie
 }
 
 func (h *Handler) CreateNoteHandler(c *gin.Context) {
@@ -18,7 +20,7 @@ func (h *Handler) CreateNoteHandler(c *gin.Context) {
 		return
 	}
 
-	session, err := Authenticate(c, sessionNote.Sid)
+	session, err := Authenticate(c, sessionNote.Sid, h.session, h.cookie)
 	if err != nil {
 		return
 	}
@@ -41,13 +43,13 @@ func (h *Handler) ViewNotesHandler(c *gin.Context) {
 	}
 
 	// test if the user has access or not
-	userSession, err := AuthenticateUsingCookie(c)
+	userSession, err := AuthenticateUsingCookie(c,h.session, h.cookie)
 	if err != nil {
 		return
 	}
 
 	// return the session object of the session id provided in the request body
-	session, err := sessions.IsAuthenticate(sessionID.Sid)
+	session, err := h.session.IsAuthenticate(sessionID.Sid)
 	if err != nil {
 		c.JSON(500, ErrorResponse{Message: "Invalid Session ID."})
 		return
@@ -76,13 +78,13 @@ func (h *Handler) DeleteNoteHandler(c *gin.Context) {
 	}
 
 	// test if the user has access or not
-	userSession, err := AuthenticateUsingCookie(c)
+	userSession, err := AuthenticateUsingCookie(c, h.session, h.cookie)
 	if err != nil {
 		return
 	}
 
 	// return the session object of the session id provided in the request body
-	session, err := sessions.IsAuthenticate(sessionNote.Sid)
+	session, err := h.session.IsAuthenticate(sessionNote.Sid)
 	if err != nil {
 		c.JSON(500, ErrorResponse{Message: "Invalid Session ID."})
 		return

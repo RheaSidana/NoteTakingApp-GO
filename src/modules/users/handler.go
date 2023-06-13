@@ -9,6 +9,8 @@ import (
 
 type Handler struct {
 	repository Repository
+	session    sessions.Session
+	cookie     sessions.Cookie
 }
 
 // SignUp
@@ -44,39 +46,39 @@ func (h *Handler) LoginUserHandler(c *gin.Context) {
 		return
 	}
 
-	session, err := sessions.GenerateSessionID(user, userInDB.ID)
+	session, err := h.session.GenerateSessionID(user, userInDB.ID)
 	if err != nil {
 		c.JSON(500, ErrorResponse{Message: "Something went wrong."})
 		return
 	}
 
-	sessions.SetCookie(c, session)
+	h.cookie.SetCookie(c, session)
 
-	c.JSON(200, UserResponseWithSession{SID: session})
+	c.JSON(200, UserRequestWithSession{SID: session})
 }
 
 // logout
 func (h *Handler) LogoutUserHandler(c *gin.Context) {
-	var userSession UserResponseWithSession
+	var userSession UserRequestWithSession
 	c.ShouldBindJSON(&userSession)
-	if userSession == (UserResponseWithSession{}) {
+	if userSession == (UserRequestWithSession{}) {
 		c.JSON(400, ErrorResponse{Message: "Bad Request: Unable to add user."})
 		return
 	}
 
-	session, err := sessions.IsAuthenticate(userSession.SID)
+	session, err := h.session.IsAuthenticate(userSession.SID)
 	if err != nil {
 		c.JSON(401, ErrorResponse{Message: "Unauthorised Access."})
 		return
 	}
 
-	session, err = sessions.DeleteSessionID(session.SessionID)
+	session, err = h.session.DeleteSessionID(session.SessionID)
 	if err != nil {
 		c.JSON(500, ErrorResponse{Message: "Something went wrong."})
 		return
 	}
 
-	sessions.DeleteCookie(c)
+	h.cookie.DeleteCookie(c)
 
 	c.JSON(200, UserResponse{Message: "User logged out successfully"})
 }
