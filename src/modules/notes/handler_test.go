@@ -219,7 +219,7 @@ func TestViewNoteHandlerWhenEmptyRequestBody(t *testing.T) {
 	handler := Handler{repository: repo, session: seesion}
 	gin.SetMode(gin.TestMode)
 	r := gin.Default()
-	r.POST("/notes", handler.ViewNotesHandler)
+	r.GET("/notes", handler.ViewNotesHandler)
 	newNote := ViewNoteRequestBody{}
 	b, _ := json.Marshal(newNote)
 	body := bytes.NewBuffer(b)
@@ -242,7 +242,7 @@ func TestViewNoteHandlerWhenUnableToFindAnyNote(t *testing.T) {
 	}
 	gin.SetMode(gin.TestMode)
 	r := gin.Default()
-	r.POST("/notes", handler.ViewNotesHandler)
+	r.GET("/notes", handler.ViewNotesHandler)
 	requestBody := ViewNoteRequestBody{
 		Sid : "sessionID",
 	}
@@ -290,7 +290,7 @@ func TestViewNoteHandler(t *testing.T) {
 	}
 	gin.SetMode(gin.TestMode)
 	r := gin.Default()
-	r.POST("/notes", handler.ViewNotesHandler)
+	r.GET("/notes", handler.ViewNotesHandler)
 	requestBody := ViewNoteRequestBody{
 		Sid : "sessionID",
 	}
@@ -337,7 +337,7 @@ func TestDeleteNoteHandlerWhenEmptyRequestBody(t *testing.T) {
 	handler := Handler{repository: repo, session: seesion}
 	gin.SetMode(gin.TestMode)
 	r := gin.Default()
-	r.POST("/notes", handler.DeleteNoteHandler)
+	r.DELETE("/notes", handler.DeleteNoteHandler)
 	newNote := DeleteNoteRequestBody{}
 	b, _ := json.Marshal(newNote)
 	body := bytes.NewBuffer(b)
@@ -360,7 +360,7 @@ func TestDeleteNoteHandlerWhenUnableToDeleteNote(t *testing.T) {
 	}
 	gin.SetMode(gin.TestMode)
 	r := gin.Default()
-	r.POST("/notes", handler.DeleteNoteHandler)
+	r.DELETE("/notes", handler.DeleteNoteHandler)
 	requestBody := DeleteNoteRequestBody{
 		Sid: "sessionID",
 		NoteID: uint(1),
@@ -408,7 +408,7 @@ func TestDeleteNoteHandler(t *testing.T) {
 	}
 	gin.SetMode(gin.TestMode)
 	r := gin.Default()
-	r.POST("/notes", handler.DeleteNoteHandler)
+	r.DELETE("/notes", handler.DeleteNoteHandler)
 	requestBody := DeleteNoteRequestBody{
 		Sid: "sessionID",
 		NoteID: uint(1),
