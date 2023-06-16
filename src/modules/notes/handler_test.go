@@ -223,7 +223,7 @@ func TestViewNoteHandlerWhenEmptyRequestBody(t *testing.T) {
 	newNote := ViewNoteRequestBody{}
 	b, _ := json.Marshal(newNote)
 	body := bytes.NewBuffer(b)
-	req, _ := http.NewRequest(http.MethodPost, "/notes", body)
+	req, _ := http.NewRequest(http.MethodGet, "/notes", body)
 	respR := httptest.NewRecorder()
 
 	r.ServeHTTP(respR, req)
@@ -248,7 +248,7 @@ func TestViewNoteHandlerWhenUnableToFindAnyNote(t *testing.T) {
 	}
 	b, _ := json.Marshal(requestBody)
 	body := bytes.NewBuffer(b)
-	req, _ := http.NewRequest(http.MethodPost, "/notes", body)
+	req, _ := http.NewRequest(http.MethodGet, "/notes", body)
 	respR := httptest.NewRecorder()
 	expectedSession := model.Session{
 		SessionID: requestBody.Sid,
@@ -296,7 +296,7 @@ func TestViewNoteHandler(t *testing.T) {
 	}
 	b, _ := json.Marshal(requestBody)
 	body := bytes.NewBuffer(b)
-	req, _ := http.NewRequest(http.MethodPost, "/notes", body)
+	req, _ := http.NewRequest(http.MethodGet, "/notes", body)
 	respR := httptest.NewRecorder()
 	expectedSession := model.Session{
 		SessionID: requestBody.Sid,
@@ -341,7 +341,7 @@ func TestDeleteNoteHandlerWhenEmptyRequestBody(t *testing.T) {
 	newNote := DeleteNoteRequestBody{}
 	b, _ := json.Marshal(newNote)
 	body := bytes.NewBuffer(b)
-	req, _ := http.NewRequest(http.MethodPost, "/notes", body)
+	req, _ := http.NewRequest(http.MethodDelete, "/notes", body)
 	respR := httptest.NewRecorder()
 
 	r.ServeHTTP(respR, req)
@@ -367,7 +367,7 @@ func TestDeleteNoteHandlerWhenUnableToDeleteNote(t *testing.T) {
 	}
 	b, _ := json.Marshal(requestBody)
 	body := bytes.NewBuffer(b)
-	req, _ := http.NewRequest(http.MethodPost, "/notes", body)
+	req, _ := http.NewRequest(http.MethodDelete, "/notes", body)
 	respR := httptest.NewRecorder()
 	expectedSession := model.Session{
 		SessionID: requestBody.Sid,
@@ -415,7 +415,7 @@ func TestDeleteNoteHandler(t *testing.T) {
 	}
 	b, _ := json.Marshal(requestBody)
 	body := bytes.NewBuffer(b)
-	req, _ := http.NewRequest(http.MethodPost, "/notes", body)
+	req, _ := http.NewRequest(http.MethodDelete, "/notes", body)
 	respR := httptest.NewRecorder()
 	expectedSession := model.Session{
 		SessionID: requestBody.Sid,
