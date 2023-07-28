@@ -56,7 +56,7 @@ psql postgres
 </h5>
 
 ``` 
-CREATE database job_scheduling; 
+CREATE database noteapp; 
 ```
 
 <br /><br />&emsp;
